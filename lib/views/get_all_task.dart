@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:zain_backend/models/task.dart';
 import 'package:zain_backend/services/task.dart';
 import 'package:zain_backend/views/create_task.dart';
+import 'package:zain_backend/views/update_task.dart';
 
 class GetAllTaskView extends StatelessWidget {
   const GetAllTaskView({super.key});
@@ -37,6 +38,18 @@ class GetAllTaskView extends StatelessWidget {
                       children: [
                         IconButton(
                             onPressed: () async {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          UpdateTaskView(model: taskList[i])));
+                            },
+                            icon: Icon(
+                              Icons.edit,
+                              color: Colors.red,
+                            )),
+                        IconButton(
+                            onPressed: () async {
                               try {
                                 await TaskServices()
                                     .deleteTask(taskList[i].docId.toString());
@@ -51,10 +64,10 @@ class GetAllTaskView extends StatelessWidget {
                             )),
                         Checkbox(
                             value: taskList[i].isCompleted,
-                            onChanged: (val) async{
+                            onChanged: (val) async {
                               try {
-                                await TaskServices()
-                                    .markTaskAsComplete(taskList[i].docId.toString());
+                                await TaskServices().markTaskAsComplete(
+                                    taskList[i].docId.toString());
                               } catch (e) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(content: Text(e.toString())));
