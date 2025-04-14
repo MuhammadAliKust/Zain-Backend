@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:zain_backend/providers/user_provider.dart';
 import 'package:zain_backend/services/auth.dart';
+import 'package:zain_backend/services/user.dart';
+import 'package:zain_backend/views/profile.dart';
 import 'package:zain_backend/views/register.dart';
 import 'package:zain_backend/views/reset_pwd.dart';
 
@@ -19,6 +23,7 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
+    var userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("Login"),
@@ -58,21 +63,28 @@ class _LoginViewState extends State<LoginView> {
                           .loginUser(
                               email: emailController.text,
                               password: pwdController.text)
-                          .then((val) {
-                        isLoading = false;
-                        setState(() {});
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: Text("Message"),
-                                content: Text("LoggedIn"),
-                                actions: [
-                                  TextButton(
-                                      onPressed: () {}, child: Text("Okay"))
-                                ],
-                              );
-                            });
+                          .then((val) async {
+                        await UserServices()
+                            .getUserByID(val!.uid.toString())
+                            .then((val) {
+                          isLoading = false;
+                          setState(() {});
+                          userProvider.setUser(val);
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text("Message"),
+                                  content: Text(val.name.toString()),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileView()));
+                                        }, child: Text("Okay"))
+                                  ],
+                                );
+                              });
+                        });
                       });
                     } catch (e) {
                       isLoading = false;
@@ -85,16 +97,23 @@ class _LoginViewState extends State<LoginView> {
           SizedBox(
             height: 20,
           ),
-          ElevatedButton(onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>RegisterView()))
-;          }, child: Text("Register")),
+          ElevatedButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => RegisterView()));
+              },
+              child: Text("Register")),
           SizedBox(
             height: 20,
           ),
-          ElevatedButton(onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>ResetPasswordView()))
-;          }, child: Text("Reset Password")),
-
+          ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ResetPasswordView()));
+              },
+              child: Text("Reset Password")),
         ],
       ),
     );
