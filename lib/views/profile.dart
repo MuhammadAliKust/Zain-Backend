@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:zain_backend/providers/user_provider.dart';
+import 'package:zain_backend/views/edit_profile.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
@@ -26,6 +27,12 @@ class ProfileView extends StatelessWidget {
             userProvider.getUser()!.address.toString(),
             style: TextStyle(fontSize: 30),
           ),
+          ElevatedButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => EditProfileView()));
+              },
+              child: Text("Update Profile"))
         ],
       ),
     );

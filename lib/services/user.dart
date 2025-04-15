@@ -20,4 +20,14 @@ class UserServices {
   }
 
   ///Update User
+  Future updateProfile(UserModel model) async {
+    return await FirebaseFirestore.instance
+        .collection('userCollection')
+        .doc(model.docId.toString())
+        .update({
+      'name': model.name,
+      'address': model.address,
+      'phone': model.phone
+    });
+  }
 }

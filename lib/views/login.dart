@@ -64,27 +64,45 @@ class _LoginViewState extends State<LoginView> {
                               email: emailController.text,
                               password: pwdController.text)
                           .then((val) async {
-                        await UserServices()
-                            .getUserByID(val!.uid.toString())
-                            .then((val) {
+                        if (val!.emailVerified == false) {
                           isLoading = false;
                           setState(() {});
-                          userProvider.setUser(val);
                           showDialog(
                               context: context,
                               builder: (context) {
                                 return AlertDialog(
-                                  title: Text("Message"),
-                                  content: Text(val.name.toString()),
-                                  actions: [
-                                    TextButton(
-                                        onPressed: () {
-                                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileView()));
-                                        }, child: Text("Okay"))
-                                  ],
+                                  title: Text("Error"),
+                                  content: Text("Kindly verify your email"),
                                 );
                               });
-                        });
+                        } else {
+                          await UserServices()
+                              .getUserByID(val.uid.toString())
+                              .then((val) {
+                            isLoading = false;
+                            setState(() {});
+                            userProvider.setUser(val);
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text("Message"),
+                                    content: Text(val.name.toString()),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ProfileView()));
+                                          },
+                                          child: Text("Okay"))
+                                    ],
+                                  );
+                                });
+                          });
+                        }
                       });
                     } catch (e) {
                       isLoading = false;
