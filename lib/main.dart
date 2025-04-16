@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:zain_backend/providers/user_provider.dart';
+import 'package:zain_backend/views/category.dart';
 import 'package:zain_backend/views/create_task.dart';
 import 'package:zain_backend/views/get_all_task.dart';
 import 'package:zain_backend/views/get_completed_task.dart';
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: LoginView(),
+      home: GetAllCategories(),
     );
   }
 }
