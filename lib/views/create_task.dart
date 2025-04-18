@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:zain_backend/models/category.dart';
 import 'package:zain_backend/models/task.dart';
+import 'package:zain_backend/services/category.dart';
 import 'package:zain_backend/services/task.dart';
 
 class CreateTaskView extends StatefulWidget {
@@ -16,6 +18,19 @@ class _CreateTaskViewState extends State<CreateTaskView> {
 
   bool isLoading = false;
 
+  List<CategoryModel> categoryList = [];
+
+  CategoryModel? _selectedCategory;
+
+  @override
+  void initState() {
+    CategoryServices().getAllCategories().then((val) {
+      categoryList = val;
+      setState(() {});
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,6 +45,20 @@ class _CreateTaskViewState extends State<CreateTaskView> {
           TextField(
             controller: descriptionController,
           ),
+          DropdownButton(
+              items: categoryList
+                  .map((e) => DropdownMenuItem(
+                        value: e,
+                        child: Text(e.name.toString()),
+                      ))
+                  .toList(),
+              isExpanded: true,
+              hint: Text("Select Category"),
+              value: _selectedCategory,
+              onChanged: (val) {
+                _selectedCategory = val;
+                setState(() {});
+              }),
           SizedBox(
             height: 20,
           ),
@@ -56,6 +85,8 @@ class _CreateTaskViewState extends State<CreateTaskView> {
                           .createTask(TaskModel(
                               title: titleController.text,
                               description: descriptionController.text,
+                              priorityName: _selectedCategory!.name.toString(),
+                              priorityID: _selectedCategory!.docId.toString(),
                               isCompleted: false,
                               createdAt: DateTime.now().millisecondsSinceEpoch))
                           .then((val) {

@@ -22,6 +22,17 @@ class TaskServices {
             .toList());
   }
 
+  ///Get Priority Tasks
+  Stream<List<TaskModel>> getPriorityTasks(String priorityID) {
+    return FirebaseFirestore.instance
+        .collection('taskCollection')
+        .where('priorityID', isEqualTo: priorityID)
+        .snapshots()
+        .map((taskList) => taskList.docs
+            .map((taskModel) => TaskModel.fromJson(taskModel.data()))
+            .toList());
+  }
+
   ///Get Completed Tasks
   Stream<List<TaskModel>> getCompletedTasks() {
     return FirebaseFirestore.instance

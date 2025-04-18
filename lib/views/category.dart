@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:zain_backend/models/category.dart';
 import 'package:zain_backend/services/category.dart';
+import 'package:zain_backend/views/get_priority_task.dart';
 
 class GetAllCategories extends StatelessWidget {
   const GetAllCategories({super.key});
@@ -19,16 +20,17 @@ class GetAllCategories extends StatelessWidget {
           List<CategoryModel> categoryList =
               context.watch<List<CategoryModel>>();
           return ListView.builder(
-
               itemCount: categoryList.length,
               itemBuilder: (context, i) {
-            return ListTile(
-              leading: Icon(Icons.category),
-              title: Text(categoryList[i].name.toString()),
-              trailing:
-                  IconButton(onPressed: () {}, icon: Icon(Icons.arrow_forward)),
-            );
-          });
+                return ListTile(
+                  leading: Icon(Icons.category),
+                  title: Text(categoryList[i].name.toString()),
+                  trailing: IconButton(
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>GetPriorityTaskView(model: categoryList[i])));
+                      }, icon: Icon(Icons.arrow_forward)),
+                );
+              });
         },
       ),
     );
