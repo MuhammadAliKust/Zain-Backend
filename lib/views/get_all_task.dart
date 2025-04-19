@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:zain_backend/models/task.dart';
+import 'package:zain_backend/providers/user_provider.dart';
 import 'package:zain_backend/services/task.dart';
 import 'package:zain_backend/views/create_task.dart';
 import 'package:zain_backend/views/update_task.dart';
@@ -10,6 +11,7 @@ class GetAllTaskView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var user = Provider.of<UserProvider>(context);
     return Scaffold(
         appBar: AppBar(
           title: Text("Get All Tasks"),
@@ -22,7 +24,7 @@ class GetAllTaskView extends StatelessWidget {
           child: Icon(Icons.add),
         ),
         body: StreamProvider.value(
-          value: TaskServices().getAllTasks(),
+          value: TaskServices().getAllTasks(user.getUser()!.docId.toString()),
           initialData: [TaskModel()],
           builder: (context, child) {
             List<TaskModel> taskList = context.watch<List<TaskModel>>();

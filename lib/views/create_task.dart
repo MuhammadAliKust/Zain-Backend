@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:zain_backend/models/category.dart';
 import 'package:zain_backend/models/task.dart';
+import 'package:zain_backend/providers/user_provider.dart';
 import 'package:zain_backend/services/category.dart';
 import 'package:zain_backend/services/task.dart';
 
@@ -33,6 +35,7 @@ class _CreateTaskViewState extends State<CreateTaskView> {
 
   @override
   Widget build(BuildContext context) {
+    var user = Provider.of<UserProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("Create Task"),
@@ -84,6 +87,7 @@ class _CreateTaskViewState extends State<CreateTaskView> {
                       await TaskServices()
                           .createTask(TaskModel(
                               title: titleController.text,
+                              userID: user.getUser()!.docId.toString(),
                               description: descriptionController.text,
                               priorityName: _selectedCategory!.name.toString(),
                               priorityID: _selectedCategory!.docId.toString(),

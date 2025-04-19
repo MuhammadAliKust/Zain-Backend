@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:zain_backend/providers/user_provider.dart';
 import 'package:zain_backend/services/auth.dart';
 import 'package:zain_backend/services/user.dart';
+import 'package:zain_backend/views/get_all_task.dart';
 import 'package:zain_backend/views/profile.dart';
 import 'package:zain_backend/views/register.dart';
 import 'package:zain_backend/views/reset_pwd.dart';
@@ -95,7 +96,7 @@ class _LoginViewState extends State<LoginView> {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        ProfileView()));
+                                                        GetAllTaskView()));
                                           },
                                           child: Text("Okay"))
                                     ],
